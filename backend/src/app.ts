@@ -5,8 +5,14 @@ import { MenuController } from './controllers/MenuController.js';
 import { createMenuRouter } from './routes/menuRoutes.js';
 import { InMemoryMenuRepository } from './repositories/InMemoryMenuRepository.js';
 
+import { OrderService } from './services/OrderService.js';
+import { OrderController } from './controllers/OrderController.js';
+import { createOrderRouter } from './routes/orderRoutes.js';
+import { InMemoryOrderRepository } from './repositories/InMemoryOrderRepository.js';
+
 export interface AppDependencies {
   menuService?: MenuService;
+  orderService?: OrderService;
 }
 
 export function createApp(dependencies: AppDependencies = {}): Express {
@@ -15,11 +21,18 @@ export function createApp(dependencies: AppDependencies = {}): Express {
   app.use(cors());
   app.use(express.json());
 
+  // Menu dependency injection
   const menuRepo = new InMemoryMenuRepository();
   const menuService = dependencies.menuService ?? new MenuService(menuRepo);
   const menuController = new MenuController(menuService);
 
+  // Order dependency injection
+  const orderRepo = new InMemoryOrderRepository();
+  const orderService = dependencies.orderService ?? new OrderService(orderRepo, menuRepo);
+  const orderController = new OrderController(orderService);
+
   app.use('/api/menu', createMenuRouter(menuController));
+  app.use('/api/orders', createOrderRouter(orderController));
 
   // Health check
   app.get('/api/health', (_req: Request, res: Response) => {
