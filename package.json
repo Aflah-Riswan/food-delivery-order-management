@@ -1,13 +1,29 @@
 {
   "name": "food-delivery",
   "version": "1.0.0",
-  "description": "",
+  "description": "Food Delivery Order Management System with MVC, SOLID, Strict TDD, and Real-Time SSE",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm --prefix backend test && npm --prefix frontend test",
+    "test:backend": "npm --prefix backend test",
+    "test:frontend": "npm --prefix frontend test",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "food-delivery",
+    "react",
+    "express",
+    "typescript",
+    "mvc",
+    "solid",
+    "tdd",
+    "sse"
+  ],
+  "author": "Aflah Riswan",
   "license": "ISC",
   "type": "module"
 }
