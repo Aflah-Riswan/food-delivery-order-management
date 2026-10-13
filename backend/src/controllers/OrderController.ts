@@ -124,4 +124,80 @@ export class OrderController {
       next(error);
     }
   };
+
+  simulate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const id = req.params.id;
+      if (!id || typeof id !== 'string') {
+        res.status(400).json({ success: false, message: 'Valid Order ID is required' });
+        return;
+      }
+
+      const { auto = false, intervalMs = 2500 } = req.body ?? {};
+
+      if (auto) {
+        this.orderService.startAutomaticSimulation(id, typeof intervalMs === 'number' ? intervalMs : 2500);
+        const current = await this.orderService.getOrderById(id);
+        res.status(200).json({
+          success: true,
+          message: 'Automatic order status simulation started',
+          data: current,
+        });
+        return;
+      }
+
+      const updated = await this.orderService.simulateNextStep(id);
+      res.status(200).json({
+        success: true,
+        data: updated,
+      });
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        res.status(404).json({ success: false, message: error.message });
+        return;
+      }
+      if (error instanceof InvalidStateTransitionError) {
+        res.status(400).json({ success: false, message: error.message });
+        return;
+      }
+      next(error);
+    }
+  };
+
+  trackSSE = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const id = req.params.id;
+      if (!id || typeof id !== 'string') {
+        res.status(400).json({ success: false, message: 'Valid Order ID is required' });
+        return;
+      }
+
+      const order = await this.orderService.getOrderById(id);
+      if (!order) {
+        res.status(404).json({ success: false, message: `Order with ID ${id} not found` });
+        return;
+      }
+
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+      if (typeof res.flushHeaders === 'function') {
+        res.flushHeaders();
+      }
+
+      res.write(`data: ${JSON.stringify({ type: 'STATUS_UPDATE', order })}\n\n`);
+
+      const unsubscribe = this.orderService.addStatusListener((updatedOrder) => {
+        if (updatedOrder.id === id) {
+          res.write(`data: ${JSON.stringify({ type: 'STATUS_UPDATE', order: updatedOrder })}\n\n`);
+        }
+      });
+
+      req.on('close', () => {
+        unsubscribe();
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

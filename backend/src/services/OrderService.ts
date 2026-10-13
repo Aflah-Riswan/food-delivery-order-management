@@ -152,6 +152,55 @@ export class OrderService {
     return saved;
   }
 
+  async simulateNextStep(id: string): Promise<Order> {
+    const existing = await this.orderRepository.findById(id);
+    if (!existing) {
+      throw new NotFoundError(`Order with ID ${id} not found`);
+    }
+
+    const NEXT_STEP_MAP: Partial<Record<OrderStatus, OrderStatus>> = {
+      PENDING: 'CONFIRMED',
+      CONFIRMED: 'PREPARING',
+      PREPARING: 'OUT_FOR_DELIVERY',
+      OUT_FOR_DELIVERY: 'DELIVERED',
+    };
+
+    const nextStatus = NEXT_STEP_MAP[existing.status];
+    if (!nextStatus) {
+      throw new InvalidStateTransitionError(
+        `Order is already in terminal state ${existing.status}`
+      );
+    }
+
+    return this.updateOrderStatus(id, nextStatus);
+  }
+
+  startAutomaticSimulation(id: string, intervalMs = 2500): { stop: () => void } {
+    let timer: NodeJS.Timeout | null = null;
+
+    const runStep = async () => {
+      try {
+        const order = await this.orderRepository.findById(id);
+        if (!order || order.status === 'DELIVERED' || order.status === 'CANCELLED') {
+          if (timer) clearInterval(timer);
+          return;
+        }
+        await this.simulateNextStep(id);
+      } catch (err) {
+        if (timer) clearInterval(timer);
+        console.error('Error during auto-simulation step:', err);
+      }
+    };
+
+    timer = setInterval(runStep, intervalMs);
+
+    return {
+      stop: () => {
+        if (timer) clearInterval(timer);
+      },
+    };
+  }
+
   async deleteOrder(id: string): Promise<boolean> {
     const existing = await this.orderRepository.findById(id);
     if (!existing) {
