@@ -1,0 +1,60 @@
+import { MenuItem } from '../models/MenuItem.js';
+
+export const defaultMenuItems: MenuItem[] = [
+  {
+    id: 'item-1',
+    name: 'Classic Cheeseburger',
+    description: 'Prime beef patty with melted cheddar, fresh lettuce, tomato, and special sauce on a brioche bun',
+    price: 11.99,
+    imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',
+    category: 'Burgers',
+  },
+  {
+    id: 'item-2',
+    name: 'Artisan Margherita Pizza',
+    description: 'San Marzano tomato sauce, fresh mozzarella di bufala, and fragrant basil leaves',
+    price: 14.5,
+    imageUrl: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=600&auto=format&fit=crop&q=80',
+    category: 'Pizza',
+  },
+  {
+    id: 'item-3',
+    name: 'Crispy Pepperoni Pizza',
+    description: 'Loaded with spicy artisan pepperoni, mozzarella, and a drizzle of hot honey',
+    price: 16.0,
+    imageUrl: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&auto=format&fit=crop&q=80',
+    category: 'Pizza',
+  },
+  {
+    id: 'item-4',
+    name: 'Caesar Salad with Grilled Chicken',
+    description: 'Crisp romaine, shaved parmesan, garlic herb croutons, and creamy house Caesar dressing',
+    price: 10.5,
+    imageUrl: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=600&auto=format&fit=crop&q=80',
+    category: 'Salads',
+  },
+  {
+    id: 'item-5',
+    name: 'Truffle Parmesan Fries',
+    description: 'Hand-cut golden fries tossed with white truffle oil, sea salt, and aged parmesan',
+    price: 6.99,
+    imageUrl: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80',
+    category: 'Sides',
+  },
+  {
+    id: 'item-6',
+    name: 'Molten Chocolate Lava Cake',
+    description: 'Rich dark chocolate cake with a warm flowing center, served with vanilla bean cream',
+    price: 7.5,
+    imageUrl: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&auto=format&fit=crop&q=80',
+    category: 'Desserts',
+  },
+  {
+    id: 'item-7',
+    name: 'Fresh Mint Lemonade',
+    description: 'Freshly squeezed lemons, garden mint sprigs, and cane sugar over crushed ice',
+    price: 4.5,
+    imageUrl: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop&q=80',
+    category: 'Drinks',
+  },
+];
