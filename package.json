@@ -8,8 +8,9 @@
     "frontend"
   ],
   "scripts": {
-    "build": "npm --prefix frontend install && npm --prefix frontend run build",
-    "vercel-build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "bundle:api": "npx esbuild backend/src/serverless.ts --bundle --platform=node --format=esm --outfile=api/index.js",
+    "build": "npm run bundle:api && npm --prefix frontend install && npm --prefix frontend run build",
+    "vercel-build": "npm run bundle:api && npm --prefix frontend install && npm --prefix frontend run build",
     "build:all": "npm --prefix backend run build && npm --prefix frontend run build",
     "build:backend": "npm --prefix backend run build",
     "build:frontend": "npm --prefix frontend run build",
@@ -34,6 +35,7 @@
   "type": "module",
   "dependencies": {
     "dotenv": "^18.0.7",
+    "esbuild": "^0.28.2",
     "typescript": "^5.7.2"
   },
   "devDependencies": {

@@ -31,11 +31,16 @@ export function createApp(dependencies: AppDependencies = {}): Express {
   const orderService = dependencies.orderService ?? new OrderService(orderRepo, menuRepo);
   const orderController = new OrderController(orderService);
 
-  app.use('/api/menu', createMenuRouter(menuController));
-  app.use('/api/orders', createOrderRouter(orderController));
+  const menuRouter = createMenuRouter(menuController);
+  app.use('/api/menu', menuRouter);
+  app.use('/menu', menuRouter);
+
+  const orderRouter = createOrderRouter(orderController);
+  app.use('/api/orders', orderRouter);
+  app.use('/orders', orderRouter);
 
   // Health check
-  app.get('/api/health', (_req: Request, res: Response) => {
+  app.get(['/api/health', '/health'], (_req: Request, res: Response) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
