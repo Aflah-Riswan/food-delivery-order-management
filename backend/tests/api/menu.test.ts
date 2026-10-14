@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../../src/app.js';
-import { InMemoryMenuRepository } from '../../src/repositories/InMemoryMenuRepository.js';
+import { MockMenuRepository } from '../mocks/MockRepositories.js';
 import { MenuService } from '../../src/services/MenuService.js';
 
 describe('GET /api/menu API', () => {
   it('should return 200 and list of menu items', async () => {
-    const menuRepo = new InMemoryMenuRepository();
+    const menuRepo = new MockMenuRepository();
     const menuService = new MenuService(menuRepo);
     const app = createApp({ menuService });
 
@@ -22,7 +22,7 @@ describe('GET /api/menu API', () => {
   });
 
   it('should return 200 and single item for valid ID', async () => {
-    const menuRepo = new InMemoryMenuRepository();
+    const menuRepo = new MockMenuRepository();
     const menuService = new MenuService(menuRepo);
     const app = createApp({ menuService });
 
@@ -34,7 +34,7 @@ describe('GET /api/menu API', () => {
   });
 
   it('should return 404 for unknown menu item ID', async () => {
-    const menuRepo = new InMemoryMenuRepository();
+    const menuRepo = new MockMenuRepository();
     const menuService = new MenuService(menuRepo);
     const app = createApp({ menuService });
 

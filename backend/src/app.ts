@@ -8,14 +8,12 @@ import { MenuService } from './services/MenuService.js';
 import { MenuController } from './controllers/MenuController.js';
 import { createMenuRouter } from './routes/menuRoutes.js';
 import { IMenuRepository } from './repositories/IMenuRepository.js';
-import { InMemoryMenuRepository } from './repositories/InMemoryMenuRepository.js';
 import { MongoMenuRepository } from './repositories/MongoMenuRepository.js';
 
 import { OrderService } from './services/OrderService.js';
 import { OrderController } from './controllers/OrderController.js';
 import { createOrderRouter } from './routes/orderRoutes.js';
 import { IOrderRepository } from './repositories/IOrderRepository.js';
-import { InMemoryOrderRepository } from './repositories/InMemoryOrderRepository.js';
 import { MongoOrderRepository } from './repositories/MongoOrderRepository.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,20 +46,12 @@ export function createApp(dependencies: AppDependencies = {}): Express {
   app.use(cors());
   app.use(express.json());
 
-  // Determine repositories based on Dependency Inversion Principle
-  const useMongo = Boolean(process.env.MONGODB_URI);
-
-  const menuRepo =
-    dependencies.menuRepo ??
-    (useMongo ? new MongoMenuRepository() : new InMemoryMenuRepository());
-
+  // Determine repositories
+  const menuRepo = dependencies.menuRepo ?? new MongoMenuRepository();
   const menuService = dependencies.menuService ?? new MenuService(menuRepo);
   const menuController = new MenuController(menuService);
 
-  const orderRepo =
-    dependencies.orderRepo ??
-    (useMongo ? new MongoOrderRepository() : new InMemoryOrderRepository());
-
+  const orderRepo = dependencies.orderRepo ?? new MongoOrderRepository();
   const orderService = dependencies.orderService ?? new OrderService(orderRepo, menuRepo);
   const orderController = new OrderController(orderService);
 
@@ -78,7 +68,7 @@ export function createApp(dependencies: AppDependencies = {}): Express {
   app.get(['/api/health', '/health'], (_req: Request, res: Response) => {
     res.status(200).json({
       status: 'ok',
-      storage: useMongo ? 'mongodb' : 'in-memory',
+      storage: 'mongodb',
       timestamp: new Date().toISOString(),
     });
   });

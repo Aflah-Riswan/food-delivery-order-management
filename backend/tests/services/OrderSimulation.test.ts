@@ -1,17 +1,16 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { OrderService } from '../../src/services/OrderService.js';
-import { InMemoryOrderRepository } from '../../src/repositories/InMemoryOrderRepository.js';
-import { InMemoryMenuRepository } from '../../src/repositories/InMemoryMenuRepository.js';
+import { MockOrderRepository, MockMenuRepository } from '../mocks/MockRepositories.js';
 import { Order } from '../../src/models/Order.js';
 
 describe('Order Simulation in OrderService', () => {
   let orderService: OrderService;
-  let orderRepo: InMemoryOrderRepository;
-  let menuRepo: InMemoryMenuRepository;
+  let orderRepo: MockOrderRepository;
+  let menuRepo: MockMenuRepository;
 
   beforeEach(() => {
-    orderRepo = new InMemoryOrderRepository();
-    menuRepo = new InMemoryMenuRepository();
+    orderRepo = new MockOrderRepository();
+    menuRepo = new MockMenuRepository();
     orderService = new OrderService(orderRepo, menuRepo);
   });
 

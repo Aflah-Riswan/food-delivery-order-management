@@ -3,8 +3,7 @@ import request from 'supertest';
 import http from 'node:http';
 import { AddressInfo } from 'node:net';
 import { createApp } from '../../src/app.js';
-import { InMemoryMenuRepository } from '../../src/repositories/InMemoryMenuRepository.js';
-import { InMemoryOrderRepository } from '../../src/repositories/InMemoryOrderRepository.js';
+import { MockMenuRepository, MockOrderRepository } from '../mocks/MockRepositories.js';
 import { MenuService } from '../../src/services/MenuService.js';
 import { OrderService } from '../../src/services/OrderService.js';
 
@@ -14,8 +13,8 @@ describe('Order Tracking & SSE API', () => {
   let menuService: MenuService;
 
   beforeEach(() => {
-    const menuRepo = new InMemoryMenuRepository();
-    const orderRepo = new InMemoryOrderRepository();
+    const menuRepo = new MockMenuRepository();
+    const orderRepo = new MockOrderRepository();
     menuService = new MenuService(menuRepo);
     orderService = new OrderService(orderRepo, menuRepo);
     app = createApp({ menuService, orderService });
