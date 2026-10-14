@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend service for Food Delivery Order Management System",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
