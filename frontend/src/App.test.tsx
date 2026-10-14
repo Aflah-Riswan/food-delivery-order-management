@@ -29,13 +29,13 @@ describe('App Integration', () => {
     vi.stubGlobal(
       'fetch',
       vi.fn((url: string) => {
-        if (url === '/api/menu') {
+        if (url.endsWith('/api/menu')) {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve({ success: true, data: mockMenuItems }),
           });
         }
-        if (url === '/api/orders') {
+        if (url.endsWith('/api/orders')) {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve({ success: true, data: [] }),
