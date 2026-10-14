@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "Food Delivery Order Management System with MVC, SOLID, Strict TDD, and Real-Time SSE",
   "main": "index.js",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "test": "npm --prefix backend test && npm --prefix frontend test",
-    "test:backend": "npm --prefix backend test",
-    "test:frontend": "npm --prefix frontend test",
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "build:backend": "npm --prefix backend run build",
     "build:frontend": "npm --prefix frontend run build",
+    "test": "npm --prefix backend test && npm --prefix frontend test",
+    "test:backend": "npm --prefix backend test",
+    "test:frontend": "npm --prefix frontend test",
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix frontend run dev"
   },
@@ -27,7 +31,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "dotenv": "^18.0.7"
+    "dotenv": "^18.0.7",
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/node": "^26.6.5"
