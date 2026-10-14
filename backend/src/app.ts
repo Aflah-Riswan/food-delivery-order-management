@@ -1,8 +1,5 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
 
 import { MenuService } from './services/MenuService.js';
 import { MenuController } from './controllers/MenuController.js';
@@ -16,28 +13,11 @@ import { createOrderRouter } from './routes/orderRoutes.js';
 import { IOrderRepository } from './repositories/IOrderRepository.js';
 import { MongoOrderRepository } from './repositories/MongoOrderRepository.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 export interface AppDependencies {
   menuService?: MenuService;
   orderService?: OrderService;
   menuRepo?: IMenuRepository;
   orderRepo?: IOrderRepository;
-}
-
-function getFrontendDistPath(): string | null {
-  const candidates = [
-    path.resolve(process.cwd(), 'frontend/dist'),
-    path.resolve(process.cwd(), '../frontend/dist'),
-    path.resolve(__dirname, '../../frontend/dist'),
-  ];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate) && fs.existsSync(path.join(candidate, 'index.html'))) {
-      return candidate;
-    }
-  }
-  return null;
 }
 
 export function createApp(dependencies: AppDependencies = {}): Express {
@@ -73,17 +53,18 @@ export function createApp(dependencies: AppDependencies = {}): Express {
     });
   });
 
-  // Serve static React frontend in production if dist exists (All-in-One deployment)
-  const frontendDist = getFrontendDistPath();
-  if (frontendDist) {
-    app.use(express.static(frontendDist));
-    app.get('*', (req: Request, res: Response, next: NextFunction) => {
-      if (req.path.startsWith('/api') || req.path.startsWith('/menu') || req.path.startsWith('/orders')) {
-        return next();
-      }
-      res.sendFile(path.join(frontendDist, 'index.html'));
+  // Root API endpoint
+  app.get('/', (_req: Request, res: Response) => {
+    res.status(200).json({
+      name: 'Food Delivery Management API',
+      status: 'ok',
+      endpoints: {
+        menu: '/api/menu',
+        orders: '/api/orders',
+        health: '/api/health',
+      },
     });
-  }
+  });
 
   // Global 404 handler for API routes
   app.use((_req: Request, res: Response) => {

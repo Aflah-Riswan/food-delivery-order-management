@@ -118,16 +118,16 @@ npm run test:frontend  # 24 passing tests (Unit + React Testing Library)
 ```
 
 ### 3. Start Development Servers
-**Terminal 1 (Backend):**
+**Terminal 1 (Backend API):**
 ```bash
 npm run dev:backend
-# Starts Express server on http://localhost:5000
+# Starts Express API server on http://localhost:3000
 ```
 
-**Terminal 2 (Frontend):**
+**Terminal 2 (Frontend UI):**
 ```bash
 npm run dev:frontend
-# Starts Vite React dev server on http://localhost:3000 (proxies /api to :5000)
+# Starts Vite React UI on http://localhost:5000 (proxies /api to :3000)
 ```
 
 ---
