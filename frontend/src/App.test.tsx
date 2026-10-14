@@ -54,7 +54,7 @@ describe('App Integration', () => {
     );
 
     expect(screen.getByText('QuickBite')).toBeInTheDocument();
-    expect(screen.getByText(/In-Memory Mode/i)).toBeInTheDocument();
+    expect(screen.getByText('Food Delivery Management System')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText('Artisan Margherita Pizza')).toBeInTheDocument();

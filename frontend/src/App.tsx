@@ -244,9 +244,6 @@ export const App: React.FC = () => {
         onTabChange={(tab) => setActiveTab(tab)}
       />
 
-      <div className="in-memory-banner">
-        <span>💾 <strong>In-Memory Mode:</strong> Menu & order data is stored in server memory. Data resets when the backend server restarts.</span>
-      </div>
 
       {notification && (
         <div className={`toast-notification toast-${notification.type}`}>
@@ -310,7 +307,7 @@ export const App: React.FC = () => {
       </main>
 
       <footer className="footer-bar">
-        <p>Food Delivery Order Management System — Built with React, Vite, Node.js, Express & TypeScript</p>
+        <p>Food Delivery Management System</p>
       </footer>
     </div>
   );
