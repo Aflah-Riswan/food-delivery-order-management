@@ -8,7 +8,8 @@ import { CheckoutForm } from './components/CheckoutForm';
 import { OrderTracker } from './components/OrderTracker';
 import { OrderHistory } from './components/OrderHistory';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) || '';
+const rawApiUrl = (import.meta.env.VITE_API_URL as string | undefined) || '';
+const API_BASE = rawApiUrl.replace(/\/+$/, '');
 
 export const App: React.FC = () => {
   const { items: cartItems, cartTotal, totalCount, addToCart, updateQuantity, removeFromCart, clearCart } = useCart();
