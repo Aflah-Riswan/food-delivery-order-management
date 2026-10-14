@@ -8,6 +8,8 @@ import { CheckoutForm } from './components/CheckoutForm';
 import { OrderTracker } from './components/OrderTracker';
 import { OrderHistory } from './components/OrderHistory';
 
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) || '';
+
 export const App: React.FC = () => {
   const { items: cartItems, cartTotal, totalCount, addToCart, updateQuantity, removeFromCart, clearCart } = useCart();
 
@@ -35,7 +37,7 @@ export const App: React.FC = () => {
     try {
       setIsLoadingMenu(true);
       setMenuError(null);
-      const res = await fetch('/api/menu');
+      const res = await fetch(`${API_BASE}/api/menu`);
       if (!res.ok) {
         throw new Error(`Failed to load menu (${res.status})`);
       }
@@ -54,7 +56,7 @@ export const App: React.FC = () => {
   // Fetch Orders History
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await fetch('/api/orders');
+      const res = await fetch(`${API_BASE}/api/orders`);
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
@@ -82,7 +84,7 @@ export const App: React.FC = () => {
     }
 
     const orderId = activeOrder.id;
-    const url = `/api/orders/${orderId}/tracking`;
+    const url = `${API_BASE}/api/orders/${orderId}/tracking`;
 
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
@@ -135,7 +137,7 @@ export const App: React.FC = () => {
         })),
       };
 
-      const res = await fetch('/api/orders', {
+      const res = await fetch(`${API_BASE}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -164,7 +166,7 @@ export const App: React.FC = () => {
   // Simulate Next Step
   const handleSimulateStep = async (orderId: string) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}/simulate`, {
+      const res = await fetch(`${API_BASE}/api/orders/${orderId}/simulate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stepOnly: true }),
@@ -188,7 +190,7 @@ export const App: React.FC = () => {
   // Auto Simulate
   const handleAutoSimulate = async (orderId: string) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}/simulate`, {
+      const res = await fetch(`${API_BASE}/api/orders/${orderId}/simulate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ auto: true, intervalMs: 2500 }),
@@ -209,7 +211,7 @@ export const App: React.FC = () => {
   // Cancel Order
   const handleCancelOrder = async (orderId: string) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}`, {
+      const res = await fetch(`${API_BASE}/api/orders/${orderId}`, {
         method: 'DELETE',
       });
 
