@@ -25,5 +25,11 @@
   ],
   "author": "Aflah Riswan",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^18.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5"
+  }
 }
